@@ -1,0 +1,4 @@
+_G.Farm = true --Execute with this set to true if you want it enabled, set to _G.Farm = false if you want to disable it
+_G.AutoRebirth = true --Set to false if you dont want it to auto rebirth you, no leaderboard if you do this doe :(
+_G.IJustWannaCashFarm = false --Leave this at false if you want to farm with rebirths and shit, set it to false if you just want it to farm cash and not teleport you for map progress
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AnomalyRBLX/Database/main/Scripts/Pressure%20Wash%20Simulator"))()
