@@ -1,0 +1,193 @@
+local library = loadstring(game:HttpGet("https://pastebin.com/raw/HYcfs6KC", true))()
+local w = library:CreateWindow('Autofarm')
+tween = true
+walking = false
+rm = false
+clik = true
+sped = 30
+w:Section('Farm shit')
+w:Dropdown('Mob name', {
+    location = shared,
+    list = {
+        "Weak Demon Slayer",
+        "Average Demon Slayer",
+        "Strong Demon Slayer",
+        "Super Strong Demon Slayer",
+        "Weak Demon",
+        "Average Demon",
+        "Strong Demon",
+        "Super Strong Demon",
+    }
+}, function(n)
+    mob = tostring(n)
+    print(mob)
+end)
+dis = 5
+w:Box('Distance from mob', {
+    type = 'number',
+}, function(a)
+    dis = tonumber(a)
+end)
+w:Toggle('Autofarm', {flag = 'on'})
+spawn(function()
+    while wait() do
+        if w.flags.on and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+            game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+        end
+    end
+end)
+spawn(function()
+    while wait() do
+        if w.flags.on then
+            for i,v in pairs(game.workspace:GetChildren()) do 
+                if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and not v:FindFirstChild("Health") and not v:FindFirstChild("ClickDetector") then
+                    if v.HumanoidRootPart:IsA("Part") and v.Name == mob then
+                        repeat
+                            if tween then
+                            game:GetService("TweenService"):create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((game.Players.LocalPlayer.Character.HumanoidRootPart.Position-v.HumanoidRootPart.Position).Magnitude/sped,Enum.EasingStyle.Quad), {CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,dis)}):Play() 
+                            --[[
+                            spawn(function()
+                                wait((game.Players.LocalPlayer.Character.HumanoidRootPart.Position-v.HumanoidRootPart.Position).Magnitude/sped)
+                                v.Humanoid.Health = 0
+                            end
+                            ]]--
+                            --[[
+                            spawn(function()
+                                if tween then
+                                    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+                                    wait((game.Players.LocalPlayer.Character.HumanoidRootPart.Position-v.HumanoidRootPart.Position).Magnitude/sped)
+                                    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+                                end
+                            end)
+                            ]]--
+                            --[[
+                            elseif walking then
+                            game.Players.LocalPlayer.Character.Humanoid:MoveTo(v.HumanoidRootPart.Position)
+                            spawn(function()
+                                while wait() do
+                                    if walking and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+                                        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = sped
+                                        game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+                                        spawn(function()
+                                            wait((game.Players.LocalPlayer.Character.HumanoidRootPart.Position-v.HumanoidRootPart.Position).Magnitude/sped)
+                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,dis)
+                                        end)
+                                    end
+                                end
+                            end)
+                            ]]--
+                            end
+                        wait()
+                        until v.Humanoid.Health == 0 or not v.HumanoidRootPart or w.flags.on == false
+                    end
+                end
+            end
+        end
+    end
+end)
+w:Toggle('Auto attack', {flag = 'on1'})
+function findName()
+    local suc = nil
+    game:GetService("ReplicatedStorage").Remotes.E:FireServer(true)
+    wait(3)
+        for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do 
+            suc = v.Name
+        end
+        return suc
+    end
+local nam = findName()
+warn(nam)
+spawn(function()
+    while wait() do
+        if w.flags.on1 then
+            if clik then
+            game:GetService("VirtualUser"):ClickButton1(Vector2.new())
+        elseif rm then
+            for i,v in pairs(game:GetService("ReplicatedStorage").Weapon.Sword:GetChildren()) do 
+                if v.Name ~= nam then
+                    game:GetService("ReplicatedStorage").Remotes.Damage:FireServer("Click", v["Basic_Anim"]["dmg_p1"])
+                end
+            end
+        end
+    end
+end
+end)
+spawn(function()
+    while wait() do
+    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+        poopsock = v.Name
+        end
+        if poopsock ~= nam and w.flags.on1 then 
+            print("fire remote")
+            game:GetService("ReplicatedStorage").Remotes.E:FireServer(true)    
+        end 
+    end
+end)
+w:Toggle('Hide name', {flag = 'on2'})
+spawn(function()
+    while wait() do
+        if w.flags.on2 then
+            if game.Players.LocalPlayer.Character:FindFirstChild("Head") then
+            for i,v in pairs(game.Players.LocalPlayer.Character.Head:GetChildren()) do 
+                if v:IsA("BillboardGui") then 
+                    v:Destroy()
+                end
+            end
+        end
+        end
+    end
+end)
+local w2 = library:CreateWindow('Options')
+--[[
+w2:Section('Tp Options')
+w2:Dropdown('Options', {
+    location = shared,
+    list = {
+        "Tween",
+        "Walking",
+    }
+}, function(n)
+    if n == "Tween" then
+        tween = true
+        walking = false
+    else
+        walking = true
+        tween = false
+    end
+    print(tween, walking)
+end)
+]]--
+w2:Section('Attack Options')
+w2:Dropdown('Options', {
+    location = shared,
+    list = {
+        "Remote",
+        "Click"
+    }
+}, function(n)
+    if n == "Remote" then
+        rm = true
+        clik = false
+    else
+        clik = true
+        rm = false
+    end
+end)
+w2:Box('Speed', {
+    type = 'number',
+}, function(n)
+    sped = tonumber(n)
+end)
+local w3 = library:CreateWindow('Kill Players')
+w3:Section('Kill Player Options')
+w3:Toggle('Kill Players', {flag = 'on69'})
+spawn(function()
+    while wait() do
+        if w3.flags.on69 then
+            for i,v in pairs(game.Players:GetChildren()) do
+                if v.Character then
+                end
+            end
+        end
+    end
+end)
